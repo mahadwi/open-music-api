@@ -58,10 +58,11 @@ const init = async () => {
         return h.continue;
       }
 
-      // penanganan server error sesuai kebutuhan
+      // Penanganan untuk server error
+      console.error(response); // Logging untuk debugging
       const newResponse = h.response({
         status: 'error',
-        message: response.message,
+        message: 'terjadi kegagalan pada server kami.',
       });
       newResponse.code(500);
       return newResponse;
