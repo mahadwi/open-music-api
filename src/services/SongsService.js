@@ -51,7 +51,7 @@ class SongsService {
   }
 
   async editSongById(id, {
-    title, year, genre, performer, duration
+    title, year, genre, performer, duration,
   }) {
     const updatedAt = new Date().toISOString();
     const query = {
