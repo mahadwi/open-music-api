@@ -4,9 +4,13 @@ const albums = require('./api/albums');
 const AlbumsService = require('./services/AlbumsService');
 const albumsValidator = require('./validator/albums');
 const ClientError = require('./exceptions/ClientError');
+const songs = require('./api/songs');
+const SongsService = require('./services/SongsService');
+const songsValidator = require('./validator/songs');
 
 const init = async () => {
   const albumsService = new AlbumsService();
+  const songsService = new SongsService();
   const server = Hapi.server({
     port: process.env.PORT,
     host: process.env.HOST,
@@ -23,16 +27,22 @@ const init = async () => {
       options: {
         service: albumsService,
         validator: albumsValidator,
-      }
-    }
+      },
+    },
+    {
+      plugin: songs,
+      options: {
+        service: songsService,
+        validator: songsValidator,
+      },
+    },
   ]);
-  
+
   server.ext('onPreResponse', (request, h) => {
     // mendapatkan konteks response dari request
     const { response } = request;
 
     if (response instanceof Error) {
- 
       // penanganan client error secara internal.
       if (response instanceof ClientError) {
         const newResponse = h.response({

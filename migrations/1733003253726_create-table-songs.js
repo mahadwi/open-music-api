@@ -22,13 +22,21 @@ exports.up = (pgm) => {
     },
     duration: {
       type: 'INTEGER',
-      notNull: true,
+      notNull: false,
     },
     albumId: {
       type: 'VARCHAR(50)',
       notNull: false,
       references: 'albums(id)',
       onDelete: 'SET NULL',
+    },
+    created_at: {
+      type: 'TEXT',
+      notNull: true,
+    },
+    updated_at: {
+      type: 'TEXT',
+      notNull: true,
     },
   });
 };
