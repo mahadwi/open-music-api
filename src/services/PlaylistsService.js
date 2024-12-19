@@ -111,7 +111,20 @@ class PlaylistsService {
     const result = await this._pool.query(query);
 
     if (!result.rows.length) {
-      throw new NotFoundError('Lahu gagal dihapus, id tidak ditemukan');
+      throw new NotFoundError('Lagu gagal dihapus, id tidak ditemukan');
+    }
+  }
+
+  async deletePlaylists(playlistId) {
+    const query = {
+      text: 'DELETE FROM playlists WHERE id = $1 RETURNING id',
+      values: [playlistId],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rows.length) {
+      throw new NotFoundError('Playlists gagal dihapus');
     }
   }
 }

@@ -31,11 +31,11 @@ class PlaylistsHandler {
 
   async getPlaylistHandler(request) {
     const { id: credentialId } = request.auth.credentials;
-    const playlist = await this._playlistsService.getPlaylist(credentialId);
+    const playlists = await this._playlistsService.getPlaylist(credentialId);
     return {
       status: 'success',
       data: {
-        playlist,
+        playlists,
       },
     };
   }
@@ -79,6 +79,15 @@ class PlaylistsHandler {
     return {
       status: 'success',
       message: 'Lagu berhasil dihapus',
+    };
+  }
+
+  async deletePlaylistsHandler(request) {
+    const { playlistId } = request.params;
+    await this._playlistsService.deletePlaylists(playlistId);
+    return {
+      status: 'success',
+      message: 'Playlist berhasil dihapus',
     };
   }
 }
