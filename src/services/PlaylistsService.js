@@ -94,12 +94,36 @@ class PlaylistsService {
 
   async getSongInPlaylist(owner) {
     const query = {
-      text: 'SELECT * FROM playlist_songs ps LEFT JOIN playlists p ON ps.playlist_id = p.id LEFT JOIN users u ON p."owner" = u.id  LEFT JOIN songs s ON ps.song_id = s.id WHERE p.owner = $1',
+      text: `
+        SELECT 
+          p.id, 
+          p.name, 
+          u.username, 
+          JSON_AGG(
+            JSON_BUILD_OBJECT(
+              'id', s.id, 
+              'title', s.title, 
+              'performer', s.performer
+            )
+          ) AS songs
+        FROM 
+          playlist_songs ps
+        LEFT JOIN 
+          playlists p ON ps.playlist_id = p.id
+        LEFT JOIN 
+          users u ON p.owner = u.id
+        LEFT JOIN 
+          songs s ON ps.song_id = s.id
+        WHERE 
+          p.owner = $1
+        GROUP BY 
+          p.id, p.name, u.username
+      `,
       values: [owner],
     };
 
     const result = await this._pool.query(query);
-    return result.rows.map(mapDBToModelPlaylistsSong);
+    return result.rows;
   }
 
   async deleteSongFromPlaylist(playlistId, songId) {

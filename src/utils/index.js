@@ -53,20 +53,18 @@ const mapDBToModelPlaylists = ({
 
 const mapDBToModelPlaylistsSong = ({
   playlist_id,
-  song_id,
-  name,
+  playlist_name,
   username,
   title,
   performer,
 }) => ({
   id: playlist_id,
-  name,
+  name: playlist_name,
   username,
-  songs: {
-    id: song_id,
+  songs: [{
     title,
     performer,
-  },
+  }],
 });
 
 module.exports = {
