@@ -65,11 +65,11 @@ class PlaylistsHandler {
     const { id: credentialId } = request.auth.credentials;
 
     await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
-    const playlist = await this._playlistsService.getSongInPlaylist(credentialId);
+    const playlists = await this._playlistsService.getSongInPlaylist(credentialId);
     return {
       status: 'success',
       data: {
-        playlist,
+        playlists,
       },
     };
   }
@@ -79,6 +79,7 @@ class PlaylistsHandler {
     const { songId } = request.payload;
     const { id: credentialId } = request.auth.credentials;
 
+    await this._playlistsService.isSongExists(songId);
     await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
     await this._playlistsService.deleteSongFromPlaylist(playlistId, songId);
     return {

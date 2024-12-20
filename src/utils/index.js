@@ -66,7 +66,7 @@ const mapDBToModelPlaylistsSong = ({
     id: song_id,
     title,
     performer,
-  }
+  },
 });
 
 module.exports = {
