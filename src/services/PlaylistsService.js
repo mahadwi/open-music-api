@@ -7,8 +7,9 @@ const AuthorizationError = require('../exceptions/AuthorizationError');
 const { mapDBToModelPlaylists, mapDBToModelPlaylistsSong } = require('../utils');
 
 class PlaylistsService {
-  constructor() {
+  constructor(cacheService) {
     this._pool = new Pool();
+    this._cacheService = cacheService;
   }
 
   async addPlaylist({ name, owner }) {
@@ -24,6 +25,8 @@ class PlaylistsService {
     if (!result.rows[0].id) {
       throw new InvariantError('Playlist gagal ditambahkan');
     }
+
+    await this._cacheService.delete(`playlist:${owner}`);
 
     return result.rows[0].id;
   }
@@ -49,6 +52,9 @@ class PlaylistsService {
     if (!result.rows.length) {
       throw new NotFoundError('Playlist gagal dihapus, id tidak ditemukan');
     }
+
+    const { owner } = result.rows[0];
+    await this._cacheService.delete(`playlist:${owner}`);
   }
 
   async verifyPlaylistOwner(playlistId, credentialId) {
