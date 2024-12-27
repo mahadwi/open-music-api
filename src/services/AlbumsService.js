@@ -41,7 +41,7 @@ class AlbumsService {
           a.id AS "albumId", 
           a.name AS "albumName", 
           a.year AS "albumYear",
-          a.cover,
+          a.cover AS "coverUrl",
           s.id AS "songId",
           s.title AS "songTitle",
           s.performer AS "songPerformer"
@@ -62,7 +62,7 @@ class AlbumsService {
       id: result.rows[0].albumId,
       name: result.rows[0].albumName,
       year: result.rows[0].albumYear,
-      cover: result.rows[0].cover,
+      coverUrl: result.rows[0].coverUrl,
       songs: result.rows
         .filter((row) => row.songId)
         .map((song) => ({
